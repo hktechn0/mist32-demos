@@ -26,7 +26,7 @@ inline void idt_load(void)
 
 idt_entry *idt_setup(void)
 {
-  volatile idt_entry *idt;
+  idt_entry *idt;
   int i;
 
   idt = malloc(sizeof(idt_entry) * IDT_ENTRY_MAX);
@@ -39,13 +39,13 @@ idt_entry *idt_setup(void)
   return idt;
 }
 
-void idt_entry_setup(volatile idt_entry *idt, unsigned int num, void (*handler)(void))
+void idt_entry_setup(idt_entry *idt, unsigned int num, void (*handler)(void))
 {
   idt[num].flags = IDT_FLAGS_VALID;
   idt[num].handler = handler;
 }
 
-void idt_entry_enable(volatile idt_entry *idt, unsigned int num)
+void idt_entry_enable(idt_entry *idt, unsigned int num)
 {
   idt[num].flags |= IDT_FLAGS_ENABLE;
 }

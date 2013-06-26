@@ -70,8 +70,8 @@ inline void interrupt_enable(void);
 inline void interrupt_disable(void);
 inline void idt_set(idt_entry *idtr);
 inline void idt_load(void);
-void idt_entry_setup(volatile idt_entry *idt, unsigned int num, void (*handler)(void));
-void idt_entry_enable(volatile idt_entry *idt, unsigned int num);
+void idt_entry_setup(idt_entry *idt, unsigned int num, void (*handler)(void));
+void idt_entry_enable(idt_entry *idt, unsigned int num);
 
 void gci_setup(void);
 inline void display_putc(void *display_io, unsigned int pos, char c,
