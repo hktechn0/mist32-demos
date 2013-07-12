@@ -1,7 +1,12 @@
-Samples for "Open Design Computer" with mist32 processor
+Examples and Demos for "Open Design Computer" with mist32 processor
 
 - Slideshow
+-- GCI-DISPLAY
+-- GCI-KMC
+
 - UART Output
+-- DPS-SCI
+-- DPS-UTIM64
 
 ---
 Open Design Computer Project
