@@ -1,0 +1,72 @@
+#define GCI_NODE_MAX 4
+#define GCI_KMC_NUM 0
+#define GCI_DISPLAY_NUM 1
+
+/* Area Size */
+#define GCI_HUB_SIZE 0x400
+#define GCI_HUB_HEADER_SIZE 0x100
+#define GCI_NODE_SIZE 0x400
+
+/* Display */
+#define DISPLAY_CHAR_WIDTH 80
+#define DISPLAY_CHAR_HEIGHT 34
+#define DISPLAY_WIDTH 640
+#define DISPLAY_HEIGHT 480
+#define DISPLAY_BITMAP_OFFSET 0xc000
+
+/* KMC */
+#define KMC_SCANCODE_VALID 0x100
+
+/* GCI struct */
+typedef volatile struct _gci_hub_info {
+  unsigned int total;
+  unsigned int space_size;
+} gci_hub_info;
+
+typedef volatile struct _gci_hub_node {
+  unsigned int size;
+  unsigned int priority;
+  unsigned int _reserved1;
+  unsigned int _reserved2;
+  unsigned int _reserved3;
+} gci_hub_node;
+
+typedef volatile struct _gci_node_info {
+  unsigned int area_size;
+  unsigned int int_priority;
+  volatile unsigned int int_factor;
+  unsigned int _reserved;
+} gci_node_info;
+
+typedef struct _gci_node {
+  gci_node_info *node_info;
+  void *device_area;
+} gci_node;
+
+/* GCI Global */
+extern gci_hub_info *gci_hub;
+extern gci_hub_node *gci_hub_nodes;
+extern gci_node *gci_nodes;
+
+void gci_setup(void);
+
+void display_putc(void *display_io, unsigned int pos, char c,
+		  unsigned int forecolor, unsigned int backcolor);
+void display_put(void *display_io, unsigned int x, unsigned int y, unsigned int color);
+
+/* inline functions */
+static inline unsigned int gci_interrupt_ack(gci_node_info *node_info)
+{
+  volatile unsigned int factor;
+
+  factor = node_info->int_factor;
+  return factor;
+}
+
+static inline unsigned int gci_kmc_scancode(void)
+{
+  volatile unsigned int *scancode;
+
+  scancode = gci_nodes[GCI_KMC_NUM].device_area;
+  return *scancode;
+}
