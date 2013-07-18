@@ -106,8 +106,8 @@ void gci_setup(void)
 }
 
 /* GCI - Display */
-void display_putc(void *display_io, unsigned int pos, char c,
-		  unsigned int forecolor, unsigned int backcolor)
+void display_putc(void *display_io, unsigned int pos,
+		  char c, unsigned int forecolor, unsigned int backcolor)
 {
   unsigned int *addr;
   unsigned int cdata = ((backcolor & 0xfff) << 20) | (forecolor & 0xfff) << 8 | c;
@@ -128,4 +128,38 @@ void display_put(void *display_io, unsigned int x, unsigned int y, unsigned int 
   addr += x + (y * DISPLAY_WIDTH);
 
   *addr = color;
+}
+
+/* GCI - MMCC */
+void gci_mmcc_init(gci_node *node)
+{
+  gci_mmcc *mmcc;
+
+  mmcc = node->device_area;
+  mmcc->init_command = MMCC_INITIAL_COMMAND;
+}
+
+void gci_mmcc_read(gci_node *node, unsigned int sector, void *buf)
+{
+  gci_mmcc *mmcc;
+  void *hwbuf;
+
+  mmcc = node->device_area;
+  mmcc->sector_read = sector;
+  
+  hwbuf = OFFSET(mmcc, MMCC_BUFFER_OFFSET);
+  memcpy_bswap32(buf, hwbuf, MMCC_BUFFER_SIZE);
+}
+
+void gci_mmcc_write(gci_node *node, unsigned int sector, void *buf)
+{
+  gci_mmcc *mmcc;
+  void *hwbuf;
+
+  mmcc = node->device_area;
+
+  hwbuf = OFFSET(mmcc, MMCC_BUFFER_OFFSET);
+  memcpy_bswap32(hwbuf, buf, MMCC_BUFFER_SIZE);
+
+  mmcc->sector_write = sector;
 }

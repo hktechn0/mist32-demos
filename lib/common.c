@@ -8,3 +8,20 @@ void *malloc(size_t size)
 
   return (void *)memory_p;
 }
+
+void memcpy_bswap32(void *dest, const void *src, size_t n)
+{
+  unsigned int *destp;
+  const unsigned int *srcp;
+
+  unsigned int i;
+
+  destp = dest;
+  srcp = src;
+
+  for(i = 0; i < (n >> 2); i++) {
+    *destp = bswap32(*srcp);
+    destp++;
+    srcp++;
+  }
+}

@@ -75,6 +75,9 @@
 /* MI */
 #define DPS_MIMSR 0x120
 
+/* buffer */
+#define SCI_RX_BUFFER_SIZE 128
+
 /* LSFLAGS */
 #define DPS_LSFLAGS 0x1fc
 #define DPS_LSFLAGS_SCIR 0x01
