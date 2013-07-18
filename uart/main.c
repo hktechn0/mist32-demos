@@ -3,16 +3,19 @@
 #include <interrupt.h>
 #include <debug.h>
 
+dps_sci *sci;
+dps_utim64 *timer;
+
 volatile unsigned int tick;
-volatile unsigned int recv;
-volatile unsigned int buffer;
+volatile char buf[SCI_RX_BUFFER_SIZE];
+volatile unsigned int buf_start, buf_end;
 
 void __attribute__((interrupt)) int05_keyboard(void)
 {
   unsigned int scancode;
 
-  gci_interrupt_ack(gci_nodes[GCI_KMC_NUM].node_info);
-  scancode = gci_kmc_scancode();
+  gci_interrupt_ack(&gci_nodes[GCI_KMC_NUM]);
+  scancode = gci_kmc_scancode(&gci_nodes[GCI_KMC_NUM]);
   debug_put_uint(scancode);
 }
 
@@ -31,11 +34,18 @@ void __attribute__((interrupt)) int24_utim64(void)
 void __attribute__((interrupt)) int25_dpsls(void)
 {
   unsigned int flags;
+  int c;
 
   flags = dps_lsflags();
 
   if(flags & DPS_LSFLAGS_SCIR) {
-    recv++;
+    while((c = sci_getc(sci)) != EOF) {
+      buf[buf_end++] = c;
+
+      if(buf_end >= SCI_RX_BUFFER_SIZE) {
+	buf_end = 0;
+      }
+    }
   }
 }
 
@@ -43,14 +53,9 @@ int start(void)
 {
   idt_entry *idt;
 
-  dps_sci *sci;
-  dps_utim64 *timer;
-  /*void *display_io;*/
-
-  char c;
-  
-  recv = 5;
   tick = 0;
+  buf_start = 0;
+  buf_end = 0;
 
   malloc(STACK_SIZE);
 
@@ -109,11 +114,12 @@ int start(void)
       tick--;
     }
 
-    if(recv > 0) {
-      while((c = sci_getc(sci)) != EOF) {
-	sci_putc(sci, c);
+    while(buf_start != buf_end) {
+      sci_putc(sci, buf[buf_start++]);
+
+      if(buf_start >= SCI_RX_BUFFER_SIZE) {
+	buf_start = 0;
       }
-      recv = 0;
     }
   }
 }

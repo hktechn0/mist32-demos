@@ -4,7 +4,7 @@ gci_hub_info *gci_hub;
 gci_hub_node *gci_hub_nodes;
 gci_node *gci_nodes;
 
-inline void *iosr_read(void)
+static inline __attribute__((always_inline)) void *iosr_read(void)
 {
   void *iosr;
 
