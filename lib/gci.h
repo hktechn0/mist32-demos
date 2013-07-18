@@ -37,6 +37,9 @@ typedef volatile struct _gci_hub_node {
   unsigned int _reserved1;
   unsigned int _reserved2;
   unsigned int _reserved3;
+  unsigned int _reserved4;
+  unsigned int _reserved5;
+  unsigned int _reserved6;
 } gci_hub_node;
 
 typedef volatile struct _gci_node_info {
