@@ -145,8 +145,10 @@ void gci_mmcc_read(gci_node *node, unsigned int sector, void *buf)
   void *hwbuf;
 
   mmcc = node->device_area;
-  mmcc->sector_read = sector;
-  
+
+  /* LBA to byte address */
+  mmcc->sector_read = sector << 9;
+
   hwbuf = OFFSET(mmcc, MMCC_BUFFER_OFFSET);
   memcpy_bswap32(buf, hwbuf, MMCC_BUFFER_SIZE);
 }
@@ -161,5 +163,5 @@ void gci_mmcc_write(gci_node *node, unsigned int sector, void *buf)
   hwbuf = OFFSET(mmcc, MMCC_BUFFER_OFFSET);
   memcpy_bswap32(hwbuf, buf, MMCC_BUFFER_SIZE);
 
-  mmcc->sector_write = sector;
+  mmcc->sector_write = sector << 9;
 }
