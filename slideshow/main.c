@@ -26,9 +26,8 @@ void __attribute__((interrupt)) int05_keyboard(void)
   dummy = gci_nodes[GCI_KEYBOARD_NUM].node_info->int_factor;
   
   while(1) {
-    keycode = *((unsigned int *)gci_nodes[GCI_KEYBOARD_NUM].device_area);
-    
-    /*debug_put_uint(keycode);*/
+    keycode = *((volatile unsigned int *)gci_nodes[GCI_KEYBOARD_NUM].device_area);
+    /* debug_put_uint(keycode); */
     
     if(!(keycode & 0x100)) {
       /* invalid */
@@ -44,43 +43,19 @@ void __attribute__((interrupt)) int05_keyboard(void)
       breakcode = 0;
       
       switch(keycode & 0xff) {
-      case 0x16:
-	nimg = 1;
-	break;
-      case 0x1e:
-	nimg = 2;
-	break;
-      case 0x26:
-	nimg = 3;
-	break;
-      case 0x25:
-	nimg = 4;
-	break;
-      case 0x2e:
-	nimg = 5;
-	break;
-      case 0x36:
-	nimg = 6;
-	break;
-      case 0x3d:
-	nimg = 7;
-	break;
-      case 0x3e:
-	nimg = 8;
-	break;
-      case 0x46:
-	nimg = 9;
-	break;
-      case 0x45:
-	nimg = 0;
-	break;
+      case 0x16: nimg = 1; break;
+      case 0x1e: nimg = 2; break;
+      case 0x26: nimg = 3; break;
+      case 0x25: nimg = 4; break;
+      case 0x2e: nimg = 5; break;
+      case 0x36: nimg = 6; break;
+      case 0x3d: nimg = 7; break;
+      case 0x3e: nimg = 8; break;
+      case 0x46: nimg = 9; break;
+      case 0x45: nimg = 0; break;
       case 0x6b:
-	if(nimg == 0) nimg = 10;
-	nimg--;
-	break;
-      default:
-	nimg++;
-	break;
+	if(nimg != 0) nimg--; break;
+      default: nimg++; break;
       }
     }
   }

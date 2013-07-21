@@ -1,5 +1,5 @@
 CC	= mist32-elf-gcc
-CFLAGS	= -nostdlib -fomit-frame-pointer -std=gnu99 -O0 -Wall
+CFLAGS	= -nostdlib -fomit-frame-pointer -std=gnu99 -O3 -Wall
 
 LIBDIR	= ../lib
 LIBSRC	= $(LIBDIR)/start.s $(LIBDIR)/debug.c $(LIBDIR)/common.c $(LIBDIR)/interrupt.c $(LIBDIR)/io.c

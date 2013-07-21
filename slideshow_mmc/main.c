@@ -12,7 +12,7 @@ void __attribute__((interrupt)) int05_keyboard(void)
 
   while(1) {
     scancode = gci_kmc_scancode(&gci_nodes[GCI_KMC_NUM]);
-    /*debug_put_uint(scancode);*/
+    /* debug_put_uint(scancode); */
 
     if(!(scancode & KMC_SCANCODE_VALID)) {
       /* invalid */
@@ -38,11 +38,8 @@ void __attribute__((interrupt)) int05_keyboard(void)
       case 0x46: nimg = 9; break;
       case 0x45: nimg = 0; break;
       case 0x6b:
-	if(nimg != 0) nimg--;
-	break;
-      default:
-	nimg++;
-	break;
+	if(nimg != 0) nimg--; break;
+      default: nimg++; break;
       }
     }
   }
