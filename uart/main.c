@@ -38,7 +38,7 @@ void __attribute__((interrupt)) int25_dpsls(void)
 
   flags = dps_lsflags();
 
-  if(flags & DPS_LSFLAGS_SCIR) {
+  if(flags & DPS_LSFLAGS_SCIRIE) {
     while((c = sci_getc(sci)) != EOF) {
       buf[buf_end++] = c;
 
@@ -81,8 +81,8 @@ int start(void)
 
   /* setup serial */
   sci = dps_sci_init();
-  dps_sci_clear(sci, 1, 1);
-  dps_sci_setup(sci, true, true, 1, 1, 1); /* 9600bps */
+  dps_sci_clear(sci, true, true);
+  dps_sci_setup(sci, true, true, 0, 0, 1); /* 9600bps */
   debug_init(sci);
 
   debug_puts("OK.\n");

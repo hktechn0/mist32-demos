@@ -80,7 +80,8 @@
 
 /* LSFLAGS */
 #define DPS_LSFLAGS 0x1fc
-#define DPS_LSFLAGS_SCIR 0x01
+#define DPS_LSFLAGS_SCITIE 0x01
+#define DPS_LSFLAGS_SCIRIE 0x02
 
 /* DPS struct */
 typedef volatile struct _dps_utim64 {
