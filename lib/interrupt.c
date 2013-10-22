@@ -1,5 +1,5 @@
+#include <stdlib.h>
 #include "interrupt.h"
-#include "common.h"
 
 idt_entry *idt_setup(void)
 {

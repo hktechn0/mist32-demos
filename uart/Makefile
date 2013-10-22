@@ -2,22 +2,24 @@ CC	= mist32-elf-gcc
 CFLAGS	= -nostdlib -fomit-frame-pointer -std=gnu99 -O3 -Wall
 
 LIBDIR	= ../lib
-LIBSRC	= $(LIBDIR)/start.s $(LIBDIR)/debug.c $(LIBDIR)/common.c $(LIBDIR)/interrupt.c $(LIBDIR)/io.c
-LIBHEAD	= $(LIBDIR)/debug.h $(LIBDIR)/common.h $(LIBDIR)/interrupt.h $(LIBDIR)/io.h
+STDLIBDIR	= ../stdlib
+LIBSRC	= $(LIBDIR)/debug.c $(LIBDIR)/interrupt.c $(LIBDIR)/io.c $(LIBDIR)/memory.c $(STDLIBDIR)/stdlib.c
+LIBHEAD	= $(LIBDIR)/debug.h $(LIBDIR)/interrupt.h $(LIBDIR)/io.h $(LIBDIR)/memory.c
 
 SRC	= main.c
+ELF	= uart.elf
 BIN	= uart.bin
 
 all:	$(BIN)
 
 clean:
-	rm $(BIN) *.elf
+	rm $(BIN) $(ELF)
 
 .SUFFIXES:	.elf .bin
 .elf.bin:
 	mist32-elf-objcopy -O binary $< $@
 
-uart.bin:	uart.elf
+$(BIN):	$(ELF)
 
-uart.elf:	$(SRC) $(LIBSRC) $(LIBHEAD)
-	$(CC) $(CFLAGS) -I $(LIBDIR) -o $@ $(LIBSRC) $(SRC)
+$(ELF):	$(SRC) $(LIBSRC) $(LIBHEAD)
+	$(CC) $(CFLAGS) -I $(LIBDIR) -I $(STDLIBDIR) -o $@ $(LIBDIR)/start.s $(LIBSRC) $(SRC)

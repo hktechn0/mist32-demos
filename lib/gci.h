@@ -73,8 +73,11 @@ void display_putc(void *display_io, unsigned int pos,
 void display_put(void *display_io, unsigned int x, unsigned int y, unsigned int color);
 
 void gci_mmcc_init(gci_node *node);
-void gci_mmcc_read(gci_node *node, unsigned int sector, void *buf);
-void gci_mmcc_write(gci_node *node, unsigned int sector, void *buf);
+void *gci_mmcc_read_req(gci_node *node, unsigned int sector);
+void *gci_mmcc_read(gci_node *node, unsigned int sector, void *buf);
+void *gci_mmcc_read_bswap32(gci_node *node, unsigned int sector, void *buf);
+void *gci_mmcc_write(gci_node *node, unsigned int sector, void *buf);
+void *gci_mmcc_write_bswap32(gci_node *node, unsigned int sector, void *buf);
 
 /* inline functions */
 static inline unsigned int gci_interrupt_ack(gci_node *node)

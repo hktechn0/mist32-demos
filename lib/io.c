@@ -1,5 +1,9 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "memory.h"
 #include "io.h"
-#include "common.h"
 
 gci_hub_info *gci_hub;
 gci_hub_node *gci_hub_nodes;
@@ -139,29 +143,62 @@ void gci_mmcc_init(gci_node *node)
   mmcc->init_command = MMCC_INITIAL_COMMAND;
 }
 
-void gci_mmcc_read(gci_node *node, unsigned int sector, void *buf)
+inline void *gci_mmcc_read_req(gci_node *node, unsigned int sector)
 {
   gci_mmcc *mmcc;
-  void *hwbuf;
 
   mmcc = node->device_area;
 
   /* LBA to byte address */
   mmcc->sector_read = sector << 9;
 
-  hwbuf = OFFSET(mmcc, MMCC_BUFFER_OFFSET);
-  memcpy_bswap32(buf, hwbuf, MMCC_BUFFER_SIZE);
+  return OFFSET(mmcc, MMCC_BUFFER_OFFSET);
 }
 
-void gci_mmcc_write(gci_node *node, unsigned int sector, void *buf)
+void *gci_mmcc_read(gci_node *node, unsigned int sector, void *buf)
+{
+  void *hwbuf;
+
+  hwbuf = gci_mmcc_read_req(node, sector);
+  memcpy(buf, hwbuf, MMCC_BUFFER_SIZE);
+
+  return buf;
+}
+
+void *gci_mmcc_read_bswap32(gci_node *node, unsigned int sector, void *buf)
+{
+  void *hwbuf;
+
+  hwbuf = gci_mmcc_read_req(node, sector);
+  memcpy_bswap32(buf, hwbuf, MMCC_BUFFER_SIZE);
+
+  return buf;
+}
+
+void *gci_mmcc_write(gci_node *node, unsigned int sector, void *buf)
 {
   gci_mmcc *mmcc;
   void *hwbuf;
 
   mmcc = node->device_area;
-
   hwbuf = OFFSET(mmcc, MMCC_BUFFER_OFFSET);
-  memcpy_bswap32(hwbuf, buf, MMCC_BUFFER_SIZE);
 
+  memcpy(hwbuf, buf, MMCC_BUFFER_SIZE);
   mmcc->sector_write = sector << 9;
+
+  return buf;
+}
+
+void *gci_mmcc_write_bswap32(gci_node *node, unsigned int sector, void *buf)
+{
+  gci_mmcc *mmcc;
+  void *hwbuf;
+
+  mmcc = node->device_area;
+  hwbuf = OFFSET(mmcc, MMCC_BUFFER_OFFSET);
+
+  memcpy_bswap32(hwbuf, buf, MMCC_BUFFER_SIZE);
+  mmcc->sector_write = sector << 9;
+
+  return buf;
 }

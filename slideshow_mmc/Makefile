@@ -2,8 +2,9 @@ CC	= mist32-elf-gcc
 CFLAGS	= -nostdlib -fomit-frame-pointer -std=gnu99 -O3 -Wall
 
 LIBDIR	= ../lib
-LIBSRC	= $(LIBDIR)/start.s $(LIBDIR)/debug.c $(LIBDIR)/common.c $(LIBDIR)/interrupt.c $(LIBDIR)/io.c
-LIBHEAD	= $(LIBDIR)/debug.h $(LIBDIR)/common.h $(LIBDIR)/interrupt.h $(LIBDIR)/io.h
+STDLIBDIR	= ../stdlib
+LIBSRC	= $(LIBDIR)/debug.c $(LIBDIR)/interrupt.c $(LIBDIR)/io.c $(LIBDIR)/memory.c $(STDLIBDIR)/stdlib.c
+LIBHEAD	= $(LIBDIR)/debug.h $(LIBDIR)/interrupt.h $(LIBDIR)/io.h $(LIBDIR)/memory.c
 
 SRC	= main.c
 ELF	= slideshow_mmc.elf
@@ -21,4 +22,4 @@ clean:
 $(BIN):	$(ELF)
 
 $(ELF):	$(SRC) $(LIBSRC) $(LIBHEAD)
-	$(CC) $(CFLAGS) -I $(LIBDIR) -o $@ $(LIBSRC) $(SRC)
+	$(CC) $(CFLAGS) -I $(LIBDIR) -I $(STDLIBDIR) -o $@ $(LIBDIR)/start.s $(LIBSRC) $(SRC)

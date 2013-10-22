@@ -1,7 +1,15 @@
-#include <common.h>
+#include <stdlib.h>
+
+#include <memory.h>
 #include <io.h>
 #include <interrupt.h>
 #include <debug.h>
+
+#define IMAGE_MAX 13
+#define IMAGE_WIDTH 640
+#define IMAGE_HEIGHT 480
+#define IMAGE_DEPTH 16
+#define IMAGE_SIZE ((IMAGE_DEPTH / 8) * IMAGE_WIDTH * IMAGE_HEIGHT)
 
 volatile unsigned int nimg, prev_nimg;
 volatile unsigned int breakcode;
@@ -113,7 +121,7 @@ int start(void)
       sector = nimg * IMAGE_SIZE / MMCC_SECTOR_SIZE;
 
       for(i = 0; i < IMAGE_SIZE; i += MMCC_SECTOR_SIZE) {
-	gci_mmcc_read(&gci_nodes[GCI_MMCC_NUM], sector++, (char *)buf + i);
+	gci_mmcc_read_bswap32(&gci_nodes[GCI_MMCC_NUM], sector++, (char *)buf + i);
       }
 
       image_output(buf);
