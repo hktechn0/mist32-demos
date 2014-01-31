@@ -121,7 +121,7 @@ int start(void)
       sector = nimg * IMAGE_SIZE / MMCC_SECTOR_SIZE;
 
       for(i = 0; i < IMAGE_SIZE; i += MMCC_SECTOR_SIZE) {
-	gci_mmcc_read_bswap32(&gci_nodes[GCI_MMCC_NUM], sector++, (char *)buf + i);
+	gci_mmcc_read(&gci_nodes[GCI_MMCC_NUM], sector++, (char *)buf + i);
       }
 
       image_output(buf);
