@@ -84,6 +84,7 @@ int main(void)
   pt[2].flags = MMU_PTE_VALID;
 
   /* start paging */
+  memory_kpdt_set(pdt);
   memory_pdt_set(pdt);
   memory_paging_start();
 
