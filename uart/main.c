@@ -41,7 +41,7 @@ void __attribute__((interrupt)) int25_dpsls(void)
 
   flags = dps_lsflags();
 
-  if(flags & DPS_LSFLAGS_SCIRIE) {
+  if(flags & LSFLAGS_SCIRIE) {
     while((c = sci_getc(sci)) != EOF) {
       buf[buf_end++] = c;
 

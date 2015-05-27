@@ -13,7 +13,7 @@ BIN	= uart.bin
 all:	$(BIN)
 
 clean:
-	rm $(BIN) $(ELF)
+	rm -f $(BIN) $(ELF)
 
 .SUFFIXES:	.elf .bin
 .elf.bin:
