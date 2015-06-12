@@ -60,8 +60,6 @@ int start(void)
   buf_start = 0;
   buf_end = 0;
 
-  malloc(STACK_SIZE);
-
   idt = idt_setup();
 
   /* keybord */

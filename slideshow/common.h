@@ -66,14 +66,14 @@ extern gci_node *gci_nodes;
 void *malloc(size_t size);
 
 idt_entry *idt_setup(void);
-inline void interrupt_enable(void);
-inline void interrupt_disable(void);
-inline void idt_set(idt_entry *idtr);
-inline void idt_load(void);
+void interrupt_enable(void);
+void interrupt_disable(void);
+void idt_set(idt_entry *idtr);
+void idt_load(void);
 void idt_entry_setup(idt_entry *idt, unsigned int num, void (*handler)(void));
 void idt_entry_enable(idt_entry *idt, unsigned int num);
 
 void gci_setup(void);
-inline void display_putc(void *display_io, unsigned int pos, char c,
-			 unsigned int forecolor, unsigned int backcolor);
-inline void display_put(void *display_io, unsigned int x, unsigned int y, unsigned int color);
+void display_putc(void *display_io, unsigned int pos, char c,
+		  unsigned int forecolor, unsigned int backcolor);
+void display_put(void *display_io, unsigned int x, unsigned int y, unsigned int color);

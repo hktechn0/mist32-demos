@@ -3,9 +3,12 @@
 
 void *malloc(size_t size)
 {
-  static unsigned int memory_p = MEMORY_MAX_ADDR;
-  
-  memory_p = (memory_p - size) & ~(0x3);
+  static volatile unsigned int memory_p = MEMORY_MAX_ADDR - STACK_SIZE;
+
+  if(size <= 0)
+    return NULL;
+
+  memory_p = (memory_p - size) & 0xfffffffc;
 
   return (void *)memory_p;
 }

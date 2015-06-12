@@ -83,9 +83,6 @@ int start(void)
   prev_nimg = 999999;
   breakcode = 0;
 
-  /* alloc stack */
-  malloc(STACK_SIZE);
-
   /* idt initialize */
   idt = idt_setup();
 

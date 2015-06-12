@@ -17,6 +17,7 @@ extern char *_binary_presentation_img13_start;
 
 volatile unsigned int nimg, prev_nimg;
 volatile unsigned int breakcode;
+volatile void *_dummy_stack;
 
 void __attribute__((interrupt)) int05_keyboard(void)
 {
@@ -93,11 +94,11 @@ int start(void)
 
   unsigned int *images[IMAGE_MAX];
 
+  _dummy_stack = malloc(STACK_SIZE);
+
   nimg = 0;
   prev_nimg = 999999;
   breakcode = 0;
-
-  malloc(STACK_SIZE);
 
   images[0] = (unsigned int *)&_binary_presentation_img01_start;
   images[1] = (unsigned int *)&_binary_presentation_img02_start;
