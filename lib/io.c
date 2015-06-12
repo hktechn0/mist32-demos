@@ -117,9 +117,9 @@ void display_putc(void *display_io, unsigned int pos,
   unsigned int cdata = ((backcolor & 0xfff) << 20) | (forecolor & 0xfff) << 8 | c;
 
   addr = (unsigned int *)display_io;
-  addr += (pos % 80) + (pos / 80 * 0x100);
+  addr += (pos % DISPLAY_CHAR_WIDTH) + (pos / DISPLAY_CHAR_WIDTH * 0x100);
 
-  if(pos < 80 * 34) {
+  if(pos < DISPLAY_CHAR_WIDTH * DISPLAY_CHAR_HEIGHT && c >= 0x20) {
     *addr = cdata;
   }
 }

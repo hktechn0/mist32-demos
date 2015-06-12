@@ -3,6 +3,7 @@ CFLAGS	= -nostdlib -fomit-frame-pointer
 
 SRC	= start.s debug.c common.c interrupt.c io.c main.c
 BIN	= slideshow.O0.bin slideshow.O1.bin slideshow.O2.bin slideshow.O3.bin
+LDSCRIPT = mist32-boot.ld
 
 IMGDIR	= bitmap/presentation
 IMGOBJS	= $(IMGDIR)/img01.o $(IMGDIR)/img02.o $(IMGDIR)/img03.o $(IMGDIR)/img04.o \
@@ -13,7 +14,7 @@ IMGOBJS	= $(IMGDIR)/img01.o $(IMGDIR)/img02.o $(IMGDIR)/img03.o $(IMGDIR)/img04.
 all:	$(BIN)
 
 clean:
-	rm $(BIN) *.out
+	rm -f $(BIN) *.out
 
 .SUFFIXES:	.out .bin
 .out.bin:
@@ -25,10 +26,10 @@ slideshow.O2.bin:	slideshow.O2.out
 slideshow.O3.bin:	slideshow.O3.out
 
 slideshow.O0.out:	$(SRC) $(IMGOBJS)
-	$(CC) $(CFLAGS) -o $@ $(SRC) $(IMGOBJS)
+	$(CC) $(CFLAGS) -T $(LDSCRIPT) -o $@ $(SRC) $(IMGOBJS)
 slideshow.O1.out:	$(SRC) $(IMGOBJS)
-	$(CC) -O1 $(CFLAGS) -o $@ $(SRC) $(IMGOBJS)
+	$(CC) -O1 $(CFLAGS) -T $(LDSCRIPT) -o $@ $(SRC) $(IMGOBJS)
 slideshow.O2.out:	$(SRC) $(IMGOBJS)
-	$(CC) -O2 $(CFLAGS) -o $@ $(SRC) $(IMGOBJS)
+	$(CC) -O2 $(CFLAGS) -T $(LDSCRIPT) -o $@ $(SRC) $(IMGOBJS)
 slideshow.O3.out:	$(SRC) $(IMGOBJS)
-	$(CC) -O3 $(CFLAGS) -o $@ $(SRC) $(IMGOBJS)
+	$(CC) -O3 $(CFLAGS) -T $(LDSCRIPT) -o $@ $(SRC) $(IMGOBJS)
